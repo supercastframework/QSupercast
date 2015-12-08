@@ -1,6 +1,8 @@
+/*
+from http://codereview.stackexchange.com/questions/11927/yet-another-json-parser-and-serializer-for-qt-but-with-additional-features
+*/
 #ifndef QJSON_H
 #define QJSON_H
-
 #include <QString>
 #include <QVariant>
 #include <QDebug>

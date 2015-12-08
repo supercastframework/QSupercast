@@ -1,3 +1,6 @@
+/*
+from http://codereview.stackexchange.com/questions/11927/yet-another-json-parser-and-serializer-for-qt-but-with-additional-features
+*/
 #include "qjson.h"
 #include <QStringList>
 
@@ -9,7 +12,6 @@ QJson::QJson()
 // ENCODER / SERIALIZER
 /* ----------------------------------------------------------------------------------------------------------------- */
 
-// from http://codereview.stackexchange.com/questions/11927/yet-another-json-parser-and-serializer-for-qt-but-with-additional-features
 
 QString QJson::encode(const QVariant &data, QString *errorMessage, int indentation)
 {
