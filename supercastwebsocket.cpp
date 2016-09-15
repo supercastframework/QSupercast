@@ -1,25 +1,27 @@
 /*
-Supercast Copyright (c) 2012-2015 Sebastien Serre <ssbx@sysmo.io>
-All Rights Reserved.
+Sysmo NMS Network Management and Monitoring solution (http://www.sysmo.io)
 
-This file is provided to you under the Apache License,
-Version 2.0 (the "License"); you may not use this file
-except in compliance with the License.  You may obtain
-a copy of the License at
+Copyright (c) 2012-2015 Sebastien Serre <ssbx@sysmo.io>
 
-  http://www.apache.org/licenses/LICENSE-2.0
+Sysmo NMS is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
 
-Unless required by applicable law or agreed to in writing,
-software distributed under the License is distributed on an
-"AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
-KIND, either express or implied.  See the License for the
-specific language governing permissions and limitations
-under the License.
+Sysmo NMS is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with Sysmo.  If not, see <http://www.gnu.org/licenses/>.
 */
 #include "supercastwebsocket.h"
 
+
 SupercastWebSocket::SupercastWebSocket(QHostAddress host, qint16 port) : QObject()
 {
+
     this->socket = new QWebSocket();
     this->socket->setParent(this);
     this->host = host;
@@ -27,8 +29,7 @@ SupercastWebSocket::SupercastWebSocket(QHostAddress host, qint16 port) : QObject
 
     this->timer = new QTimer(this);
     this->timer->setSingleShot(true);
-    int socket_timeout = 1000;
-    this->timer->setInterval(socket_timeout);
+    this->timer->setInterval(Sysmo::SUPERCAST_SOCKET_TIMEOUT);
 
     QObject::connect(
                 this->timer, SIGNAL(timeout()),
@@ -43,10 +44,13 @@ SupercastWebSocket::SupercastWebSocket(QHostAddress host, qint16 port) : QObject
     QObject::connect(
                 this->socket, SIGNAL(textMessageReceived(QString)),
                 this,         SLOT(handleTextMessage(QString)));
+
 }
+
 
 void SupercastWebSocket::threadStarted()
 {
+
     QString urlStr = "ws://%1:%2/websocket";
     QUrl url(urlStr.arg(this->host.toString()).arg(this->port));
     this->timer->start();
@@ -55,51 +59,68 @@ void SupercastWebSocket::threadStarted()
 
 }
 
+
 SupercastWebSocket::~SupercastWebSocket()
 {
+
     this->socket->close();
+
 }
+
 
 void SupercastWebSocket::timerTimeout()
 {
+
     if (this->socket->state() == QAbstractSocket::UnconnectedState) return;
     if (this->socket->state() != QAbstractSocket::ConnectedState) {
         emit this->waitTimeout(QAbstractSocket::NetworkError);
         this->socket->abort();
     }
+
 }
+
 
 void SupercastWebSocket::handleTextMessage(const QString &message)
 {
+
     QVariant json_obj = QJson::decode(message);
     emit this->serverMessage(json_obj);
+
 }
 
 
 void SupercastWebSocket::handleClientMessage(QVariant msg)
 {
+
     //QByteArray json_array = QJson::encode(msg).toLatin1();
     this->socket->sendTextMessage(QJson::encode(msg));
+
 }
 
 qint32 SupercastWebSocket::arrayToInt32(QByteArray source)
 {
+
     qint32 temp;
     QDataStream data(&source, QIODevice::ReadWrite);
     data >> temp;
     return temp;
+
 }
 
 QByteArray SupercastWebSocket::int32ToArray(qint32 source)
 {
+
     QByteArray temp;
     QDataStream data(&temp, QIODevice::ReadWrite);
     data << source;
     return temp;
+
 }
 
 void SupercastWebSocket::handleSocketError(QAbstractSocket::SocketError error) {
+
     emit this->socketError((int) error);
+   
 }
 
 
