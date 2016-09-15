@@ -19,8 +19,8 @@ along with Sysmo.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef SUPERCASTWEBSOCKET_H
 #define SUPERCASTWEBSOCKET_H
 
-#include "sysmo.h"
-#include "qjson.h"
+#include <supercast_consts.h>
+#include <qjson.h>
 
 #include <QObject>
 #include <QStringList>

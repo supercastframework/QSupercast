@@ -1,0 +1,3 @@
+[submodule "deps/qjson"]
+	path = deps/qjson
+	url = git@github.com:supercastframework/qjson.git
