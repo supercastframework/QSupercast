@@ -15,6 +15,7 @@ clean_all:
 ' > Makefile
 
 rm -rf build
+
 # create Unix Makefiles project
 mkdir build && cd build && cmake ..
 
